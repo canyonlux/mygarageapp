@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mygarageapp/MenuPage.dart';
 
 void main() {
   runApp(MyGarageApp());
@@ -11,7 +12,7 @@ class MyGarageApp extends StatelessWidget {
       title: 'MyGarageApp',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        fontFamily: 'Roboto', // Cambiar la fuente si lo deseas
+        fontFamily: 'roboto', // Cambiar la fuente si lo deseas
       ),
       home: HomePage(),
       debugShowCheckedModeBanner: false, // Quitar el banner de "Debug"
@@ -45,41 +46,26 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               Spacer(flex: 3), // Espacio entre el título y el botón
-              ElevatedButton(
+              ElevatedButton.icon(
                 onPressed: () {
-                  // Navegar a la siguiente página
+                  // Navegar a la siguiente página (MenuPage)
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => NextPage()),
+                    MaterialPageRoute(builder: (context) => MenuPage()),
                   );
                 },
+                icon: Icon(Icons.arrow_forward, size: 24), // Icono para invitar a entrar
+                label: Text('Entrar'),
                 style: ElevatedButton.styleFrom(
+                  primary: Colors.blueGrey[800],
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                   textStyle: TextStyle(fontSize: 20),
                 ),
-                child: Text('Entrar'),
               ),
-              Spacer(flex:1), // Espacio para empujar el botón hacia abajo
+              Spacer(flex: 1), // Espacio para empujar el botón hacia abajo
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class NextPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Siguiente Página'),
-      ),
-      body: Center(
-        child: Text(
-          'Esta es la siguiente página',
-          style: TextStyle(fontSize: 24),
-        ),
       ),
     );
   }
