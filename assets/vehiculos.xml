@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vehiculos>
+    <Coche>Nissan GT-R</Coche>
+    <Coche>Honda Civic</Coche>
+    <Coche>Toyota Supra</Coche>
+
+    <Moto>Yamaha YZF-R1</Moto>
+    <Moto>Honda CBR600RR</Moto>
+    <Moto>Suzuki GSX-R750</Moto>
+
+    <Bici>Specialized Tarmac</Bici>
+    <Bici>Cannondale SuperSix</Bici>
+    <Bici>Trek Emonda</Bici>
+</vehiculos>

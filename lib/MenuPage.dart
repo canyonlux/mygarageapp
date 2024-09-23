@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mygarageapp/AddVehiclePage.dart';
+
 
 class MenuPage extends StatelessWidget {
   final List<String> vehiculos = ['Coche 1', 'Moto 2', 'Bicicleta 3'];
@@ -14,14 +15,12 @@ class MenuPage extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Imagen de fondo
           Image.asset(
             'assets/menupage.webp',
             fit: BoxFit.cover,
           ),
           Column(
             children: [
-              // Lista de vehículos en la parte superior
               Expanded(
                 child: ListView.builder(
                   itemCount: vehiculos.length,
@@ -36,21 +35,16 @@ class MenuPage extends StatelessWidget {
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                         ),
                         trailing: Icon(Icons.more_vert, color: Colors.blueGrey[800]),
-                        onTap: () {
-                          // Acción al seleccionar un vehículo
-                        },
                       ),
                     );
                   },
                 ),
               ),
-              // Botones en la parte inferior
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Botón para agregar vehículo
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () {
@@ -68,12 +62,11 @@ class MenuPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(width: 20), // Espacio entre los botones
-                    // Botón para registrar mantenimiento
+                    SizedBox(width: 20),
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () {
-                          // Navegar a la página de registrar mantenimiento
+                          // Pendiente implementar la página de mantenimiento
                         },
                         icon: Icon(Icons.build),
                         label: Text('Registrar Mantenimiento'),
@@ -86,29 +79,9 @@ class MenuPage extends StatelessWidget {
                   ],
                 ),
               ),
-
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-// Página para agregar un vehículo
-class AddVehiclePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Agregar Vehículo'),
-        backgroundColor: Colors.blueGrey[800],
-      ),
-      body: Center(
-        child: Text(
-          'Formulario para agregar vehículo',
-          style: TextStyle(fontSize: 24),
-        ),
       ),
     );
   }
