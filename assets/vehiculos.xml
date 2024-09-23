@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <vehiculos>
-    <Coche>Nissan GT-R</Coche>
+    <!-- Coches más vendidos en Europa -->
+    <Coche>Volkswagen Golf</Coche>
+    <Coche>Peugeot 208</Coche>
+    <Coche>Tesla Model 3</Coche>
+    <Coche>Renault Clio</Coche>
+    <Coche>Ford Fiesta</Coche>
+    <Coche>Opel Corsa</Coche>
+    <Coche>Toyota Yaris</Coche>
+    <Coche>Volkswagen Polo</Coche>
+    <Coche>Audi A3</Coche>
+    <Coche>Skoda Octavia</Coche>
+    <Coche>Toyota Celica</Coche>
+    <Coche>Nissan Primastar</Coche>
+    <Coche>Mercedes CLA</Coche>
     <Coche>Honda Civic</Coche>
     <Coche>Toyota Supra</Coche>
+    <!-- Motos más vendidas en Europa -->
 
-    <Moto>Yamaha YZF-R1</Moto>
-    <Moto>Honda CBR600RR</Moto>
-    <Moto>Suzuki GSX-R750</Moto>
+    <Moto>Triumph Speed Triple</Moto>
+    <Moto>Yamaha MT-07</Moto>
+    <Moto>Honda CB500F</Moto>
+    <Moto>BMW R1250GS</Moto>
+    <Moto>Kawasaki Z900</Moto>
+    <Moto>Triumph Street Triple</Moto>
+    <Moto>Ducati Monster</Moto>
+    <Moto>Harley-Davidson Sportster</Moto>
+    <Moto>Honda Africa Twin</Moto>
+    <Moto>Suzuki SV650</Moto>
+    <Moto>KTM 390 Duke</Moto>
 
-    <Bici>Specialized Tarmac</Bici>
-    <Bici>Cannondale SuperSix</Bici>
-    <Bici>Trek Emonda</Bici>
+    <!-- Bicicletas más vendidas en Europa -->
+    <Bici>Canyon Lux</Bici>
+    <Bici>Trek Domane</Bici>
+    <Bici>Cannondale Synapse</Bici>
+    <Bici>Specialized Allez</Bici>
+    <Bici>Bianchi Infinito</Bici>
+    <Bici>Scott Addict</Bici>
+    <Bici>Merida Reacto</Bici>
+    <Bici>Focus Izalco</Bici>
+    <Bici>Pinarello Razha</Bici>
+    <Bici>Canyon Ultimate</Bici>
+    <Bici>Orbea Rise</Bici>
+    <Bici>Bh Sphere</Bici>
+
 </vehiculos>

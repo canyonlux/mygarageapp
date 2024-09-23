@@ -57,6 +57,9 @@ flutter:
   assets:
     - assets/garage.webp
     - assets/menupage.webp
+    - assets/addMoto.jpeg
+    - assets/addBici.jpeg
+    - assets/addCoche.jpeg
     - assets/vehiculos.xml
 
 

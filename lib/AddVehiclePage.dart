@@ -39,35 +39,57 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
         title: Text('Añadir Vehículo'),
         backgroundColor: Colors.blueGrey[800],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _vehicleTypeButton('Coche', 'Coche'),
-              _vehicleTypeButton('Moto', 'Moto'),
-              _vehicleTypeButton('Bici', 'Bici'),
-            ],
+          // Imagen de fondo
+          Image.asset(
+            'assets/add${selectedVehicleType}.jpeg', // Cambiar según el tipo de vehículo
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: vehicleList.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  child: ListTile(
-                    leading: Icon(Icons.directions_car),
-                    title: Text(vehicleList[index]),
-                  ),
-                );
-              },
-            ),
+          // Contenido sobre la imagen
+          Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _vehicleTypeButton('Coche', 'Coche'),
+                  _vehicleTypeButton('Moto', 'Moto'),
+                  _vehicleTypeButton('Bici', 'Bici'),
+                ],
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: vehicleList.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      child: ListTile(
+                        leading: _getVehicleIcon(selectedVehicleType),
+                        title: Text(vehicleList[index]),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
-
+// Método para obtener la imagen correspondiente según el tipo de vehículo
+  Widget _getVehicleImage(String type) {
+    switch (type) {
+      case 'Moto':
+        return Image.asset('assets/addMoto.jpeg', width: 50, height: 50); // Ajusta el tamaño según sea necesario
+      case 'Bici':
+        return Image.asset('assets/addBici.jpeg', width: 50, height: 50);
+      default:
+        return Image.asset('assets/addCoche.jpeg', width: 50, height: 50);
+    }
+  }
   // Botón de selección de tipo de vehículo
   Widget _vehicleTypeButton(String type, String label) {
     return ElevatedButton(
@@ -84,5 +106,17 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
       ),
       child: Text(label),
     );
+  }
+
+  // Método para obtener el ícono correspondiente según el tipo de vehículo
+  Icon _getVehicleIcon(String type) {
+    switch (type) {
+      case 'Moto':
+        return Icon(Icons.motorcycle, color: Colors.blueGrey[800]);
+      case 'Bici':
+        return Icon(Icons.directions_bike, color: Colors.blueGrey[800]);
+      default:
+        return Icon(Icons.directions_car, color: Colors.blueGrey[800]);
+    }
   }
 }
