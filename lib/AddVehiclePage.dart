@@ -41,14 +41,12 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
       ),
       body: Stack(
         children: [
-          // Imagen de fondo
           Image.asset(
             'assets/add${selectedVehicleType}.jpeg', // Cambiar según el tipo de vehículo
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
           ),
-          // Contenido sobre la imagen
           Column(
             children: [
               Row(
@@ -68,6 +66,12 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
                       child: ListTile(
                         leading: _getVehicleIcon(selectedVehicleType),
                         title: Text(vehicleList[index]),
+                        onTap: () {
+                          Navigator.pop(context, {
+                            'name': vehicleList[index],
+                            'type': selectedVehicleType
+                          });
+                        },
                       ),
                     );
                   },
@@ -79,17 +83,7 @@ class _AddVehiclePageState extends State<AddVehiclePage> {
       ),
     );
   }
-// Método para obtener la imagen correspondiente según el tipo de vehículo
-  Widget _getVehicleImage(String type) {
-    switch (type) {
-      case 'Moto':
-        return Image.asset('assets/addMoto.jpeg', width: 50, height: 50); // Ajusta el tamaño según sea necesario
-      case 'Bici':
-        return Image.asset('assets/addBici.jpeg', width: 50, height: 50);
-      default:
-        return Image.asset('assets/addCoche.jpeg', width: 50, height: 50);
-    }
-  }
+
   // Botón de selección de tipo de vehículo
   Widget _vehicleTypeButton(String type, String label) {
     return ElevatedButton(
