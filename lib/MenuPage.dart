@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert'; // Necesario para JSON
 import 'AddVehiclePage.dart';
+import 'VehicleDetailPage.dart'; // Importa la nueva página
 
 class MenuPage extends StatefulWidget {
   @override
@@ -46,12 +47,36 @@ class _MenuPageState extends State<MenuPage> {
     saveVehicles(); // Guardar los cambios
   }
 
-  // Método para eliminar un vehículo de la lista
+  // Método para eliminar un vehículo de la lista con confirmación
   void removeVehicle(int index) {
-    setState(() {
-      selectedVehicles.removeAt(index);
-    });
-    saveVehicles(); // Guardar los cambios
+    // Mostrar un cuadro de diálogo de confirmación
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Eliminar Vehículo'),
+          content: Text('¿Estás seguro de que quieres eliminar este vehículo?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el diálogo
+              },
+              child: Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  selectedVehicles.removeAt(index);
+                });
+                saveVehicles(); // Guardar los cambios
+                Navigator.of(context).pop(); // Cerrar el diálogo
+              },
+              child: Text('Eliminar', style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // Método para obtener el icono correspondiente
@@ -95,6 +120,15 @@ class _MenuPageState extends State<MenuPage> {
                           selectedVehicles[index]['name']!,
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                         ),
+                        onTap: () {
+                          // Navegar a la página de detalles del vehículo
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => VehicleDetailPage(vehicle: selectedVehicles[index]),
+                            ),
+                          );
+                        },
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
