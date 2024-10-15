@@ -25,6 +25,7 @@ class _VehicleDetailPageState extends State<VehicleDetailPage> {
   final TextEditingController _mantenimientoOperacionesController = TextEditingController();
   final TextEditingController _mantenimientoPiezasController = TextEditingController();
   final TextEditingController _mantenimientoPrecioController = TextEditingController();
+  final TextEditingController _mantenimientoKilometrosController = TextEditingController(); // Nuevo controlador para kilómetros
 
   List<Map<String, String>> mantenimientos = [];
 
@@ -64,13 +65,15 @@ class _VehicleDetailPageState extends State<VehicleDetailPage> {
     if (_mantenimientoDateController.text.isNotEmpty &&
         _mantenimientoOperacionesController.text.isNotEmpty &&
         _mantenimientoPiezasController.text.isNotEmpty &&
-        _mantenimientoPrecioController.text.isNotEmpty) {
+        _mantenimientoPrecioController.text.isNotEmpty &&
+        _mantenimientoKilometrosController.text.isNotEmpty) { // Validar que el nuevo campo no esté vacío
       setState(() {
         mantenimientos.add({
           'fecha': _mantenimientoDateController.text,
           'operaciones': _mantenimientoOperacionesController.text,
           'piezas': _mantenimientoPiezasController.text,
           'precio': _mantenimientoPrecioController.text,
+          'kilometros': _mantenimientoKilometrosController.text, // Guardar el nuevo campo
         });
       });
 
@@ -82,6 +85,7 @@ class _VehicleDetailPageState extends State<VehicleDetailPage> {
       _mantenimientoOperacionesController.clear();
       _mantenimientoPiezasController.clear();
       _mantenimientoPrecioController.clear();
+      _mantenimientoKilometrosController.clear(); // Limpiar el nuevo campo
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Por favor, completa todos los campos')),
@@ -105,7 +109,9 @@ class _VehicleDetailPageState extends State<VehicleDetailPage> {
     if (encodedMantenimientos != null) {
       List<dynamic> decodedMantenimientos = jsonDecode(encodedMantenimientos);
       setState(() {
-        mantenimientos = decodedMantenimientos.cast<Map<String, String>>();
+        mantenimientos = decodedMantenimientos
+            .map((item) => Map<String, String>.from(item as Map<String, dynamic>))
+            .toList();
       });
     }
   }
@@ -135,83 +141,88 @@ class _VehicleDetailPageState extends State<VehicleDetailPage> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.asset(
-                _getVehicleImage(widget.vehicle['type']!),
-                height: 200,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-              SizedBox(height: 16),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+          Image.asset(
+          _getVehicleImage(widget.vehicle['type']!),
+          height: 200,
+          width: double.infinity,
+          fit: BoxFit.cover,
+        ),
+        SizedBox(height: 16),
 
-              // Formulario editable para la información del vehículo
-              TextField(
-                controller: _kilometrosController,
-                decoration: InputDecoration(labelText: 'Kilómetros'),
-                keyboardType: TextInputType.number,
-              ),
-              TextField(
-                controller: _anioFabricacionController,
-                decoration: InputDecoration(labelText: 'Año de Fabricación'),
-                keyboardType: TextInputType.number,
-              ),
-              TextField(
-                controller: _colorController,
-                decoration: InputDecoration(labelText: 'Color'),
-              ),
-              TextField(
-                controller: _matriculaController,
-                decoration: InputDecoration(labelText: 'Matrícula'),
-              ),
-              TextField(
-                controller: _proximaItvController,
-                decoration: InputDecoration(labelText: 'Próxima ITV'),
-              ),
-              TextField(
-                controller: _operacionesController,
-                decoration: InputDecoration(labelText: 'Operaciones a Realizar'),
-              ),
-              ElevatedButton(
-                onPressed: saveVehicleData,
-                child: Text('Guardar Datos del Vehículo'),
-                style: ElevatedButton.styleFrom(primary: Colors.blueGrey[800]),
-              ),
-              SizedBox(height: 16),
+        // Formulario editable para la información del vehículo
+        TextField(
+          controller: _kilometrosController,
+          decoration: InputDecoration(labelText: 'Kilómetros'),
+          keyboardType: TextInputType.number,
+        ),
+        TextField(
+          controller: _anioFabricacionController,
+          decoration: InputDecoration(labelText: 'Año de Fabricación'),
+          keyboardType: TextInputType.number,
+        ),
+        TextField(
+          controller: _colorController,
+          decoration: InputDecoration(labelText: 'Color'),
+        ),
+        TextField(
+          controller: _matriculaController,
+          decoration: InputDecoration(labelText: 'Matrícula'),
+        ),
+        TextField(
+          controller: _proximaItvController,
+          decoration: InputDecoration(labelText: 'Próxima ITV'),
+        ),
+        TextField(
+          controller: _operacionesController,
+          decoration: InputDecoration(labelText: 'Operaciones a Realizar'),
+        ),
+        ElevatedButton(
+          onPressed: saveVehicleData,
+          child: Text('Guardar Datos del Vehículo'),
+          style: ElevatedButton.styleFrom(primary: Colors.blueGrey[800]),
+        ),
+        SizedBox(height: 16),
 
-              // Formulario para añadir mantenimiento
-              TextField(
-                controller: _mantenimientoDateController,
-                decoration: InputDecoration(labelText: 'Fecha de Mantenimiento'),
-              ),
-              TextField(
-                controller: _mantenimientoOperacionesController,
-                decoration: InputDecoration(labelText: 'Operaciones Realizadas'),
-              ),
-              TextField(
-                controller: _mantenimientoPiezasController,
-                decoration: InputDecoration(labelText: 'Piezas Sustituidas'),
-              ),
-              TextField(
-                controller: _mantenimientoPrecioController,
-                decoration: InputDecoration(labelText: 'Precio'),
-                keyboardType: TextInputType.number,
-              ),
-              ElevatedButton(
-                onPressed: saveMantenimiento,
-                child: Text('Grabar Mantenimiento'),
-                style: ElevatedButton.styleFrom(primary: Colors.blueGrey[800]),
-              ),
-              SizedBox(height: 16),
+        // Formulario para añadir mantenimiento
+        TextField(
+          controller: _mantenimientoDateController,
+          decoration: InputDecoration(labelText: 'Fecha de Mantenimiento'),
+        ),
+        TextField(
+          controller: _mantenimientoOperacionesController,
+          decoration: InputDecoration(labelText: 'Operaciones Realizadas'),
+        ),
+        TextField(
+          controller: _mantenimientoPiezasController,
+          decoration: InputDecoration(labelText: 'Piezas Sustituidas'),
+        ),
+        TextField(
+          controller: _mantenimientoPrecioController,
+          decoration: InputDecoration(labelText: 'Precio'),
+          keyboardType: TextInputType.number,
+        ),
+        TextField(
+          controller: _mantenimientoKilometrosController,
+          decoration: InputDecoration(labelText: 'Kilómetros del Mantenimiento'), // Nuevo campo para los kilómetros
+          keyboardType: TextInputType.number,
+        ),
+        ElevatedButton(
+          onPressed: saveMantenimiento,
+          child: Text('Grabar Mantenimiento'),
+          style: ElevatedButton.styleFrom(primary: Colors.blueGrey[800]),
+        ),
+        SizedBox(height: 16),
 
-              // Listado de mantenimientos realizados
-              Text(
-                'Mantenimientos Realizados:',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              ListView.builder(
-                shrinkWrap: true, // Permitir que la lista se ajuste a su contenido
-                physics: NeverScrollableScrollPhysics(), // Desactivar el scroll de la lista
+        // Listado de mantenimientos realizados
+        Text(
+          'Mantenimientos Realizados:',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        ListView.builder(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(), // Desactivar el scroll de la lista
                 itemCount: mantenimientos.length,
                 itemBuilder: (context, index) {
                   return Card(
