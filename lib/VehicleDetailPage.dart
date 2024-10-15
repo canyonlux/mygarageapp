@@ -12,31 +12,65 @@ class VehicleDetailPage extends StatefulWidget {
 }
 
 class _VehicleDetailPageState extends State<VehicleDetailPage> {
-  final TextEditingController _mantenimientoDateController = TextEditingController();
+  // Controladores para la información del vehículo
+  final TextEditingController _kilometrosController = TextEditingController();
+  final TextEditingController _anioFabricacionController = TextEditingController();
+  final TextEditingController _colorController = TextEditingController();
+  final TextEditingController _matriculaController = TextEditingController();
+  final TextEditingController _proximaItvController = TextEditingController();
   final TextEditingController _operacionesController = TextEditingController();
-  final TextEditingController _piezasController = TextEditingController();
-  final TextEditingController _precioController = TextEditingController();
+
+  // Controladores para el formulario de mantenimiento
+  final TextEditingController _mantenimientoDateController = TextEditingController();
+  final TextEditingController _mantenimientoOperacionesController = TextEditingController();
+  final TextEditingController _mantenimientoPiezasController = TextEditingController();
+  final TextEditingController _mantenimientoPrecioController = TextEditingController();
 
   List<Map<String, String>> mantenimientos = [];
 
   @override
   void initState() {
     super.initState();
-    loadMantenimientos(); // Cargar mantenimientos al iniciar
+    loadVehicleData(); // Cargar datos del vehículo
+    loadMantenimientos(); // Cargar mantenimientos
+  }
+
+  // Método para cargar los datos del vehículo desde SharedPreferences
+  Future<void> loadVehicleData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _kilometrosController.text = prefs.getString('kilometros_${widget.vehicle['name']}') ?? '';
+      _anioFabricacionController.text = prefs.getString('anio_fabricacion_${widget.vehicle['name']}') ?? '';
+      _colorController.text = prefs.getString('color_${widget.vehicle['name']}') ?? '';
+      _matriculaController.text = prefs.getString('matricula_${widget.vehicle['name']}') ?? '';
+      _proximaItvController.text = prefs.getString('proxima_itv_${widget.vehicle['name']}') ?? '';
+      _operacionesController.text = prefs.getString('operaciones_${widget.vehicle['name']}') ?? '';
+    });
+  }
+
+  // Método para guardar los datos del vehículo en SharedPreferences
+  Future<void> saveVehicleData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('kilometros_${widget.vehicle['name']}', _kilometrosController.text);
+    await prefs.setString('anio_fabricacion_${widget.vehicle['name']}', _anioFabricacionController.text);
+    await prefs.setString('color_${widget.vehicle['name']}', _colorController.text);
+    await prefs.setString('matricula_${widget.vehicle['name']}', _matriculaController.text);
+    await prefs.setString('proxima_itv_${widget.vehicle['name']}', _proximaItvController.text);
+    await prefs.setString('operaciones_${widget.vehicle['name']}', _operacionesController.text);
   }
 
   // Método para guardar el mantenimiento
   void saveMantenimiento() {
     if (_mantenimientoDateController.text.isNotEmpty &&
-        _operacionesController.text.isNotEmpty &&
-        _piezasController.text.isNotEmpty &&
-        _precioController.text.isNotEmpty) {
+        _mantenimientoOperacionesController.text.isNotEmpty &&
+        _mantenimientoPiezasController.text.isNotEmpty &&
+        _mantenimientoPrecioController.text.isNotEmpty) {
       setState(() {
         mantenimientos.add({
           'fecha': _mantenimientoDateController.text,
-          'operaciones': _operacionesController.text,
-          'piezas': _piezasController.text,
-          'precio': _precioController.text,
+          'operaciones': _mantenimientoOperacionesController.text,
+          'piezas': _mantenimientoPiezasController.text,
+          'precio': _mantenimientoPrecioController.text,
         });
       });
 
@@ -45,11 +79,10 @@ class _VehicleDetailPageState extends State<VehicleDetailPage> {
 
       // Limpiar los campos después de guardar
       _mantenimientoDateController.clear();
-      _operacionesController.clear();
-      _piezasController.clear();
-      _precioController.clear();
+      _mantenimientoOperacionesController.clear();
+      _mantenimientoPiezasController.clear();
+      _mantenimientoPrecioController.clear();
     } else {
-      // Mostrar un mensaje de error si hay campos vacíos
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Por favor, completa todos los campos')),
       );
@@ -59,15 +92,15 @@ class _VehicleDetailPageState extends State<VehicleDetailPage> {
   // Método para guardar mantenimientos en SharedPreferences
   Future<void> saveMantenimientos() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String key = 'mantenimientos_${widget.vehicle['name']}'; // Usar el nombre del vehículo como clave
-    String encodedMantenimientos = jsonEncode(mantenimientos); // Convertir la lista a JSON
+    String key = 'mantenimientos_${widget.vehicle['name']}';
+    String encodedMantenimientos = jsonEncode(mantenimientos);
     await prefs.setString(key, encodedMantenimientos);
   }
 
   // Método para cargar mantenimientos desde SharedPreferences
   Future<void> loadMantenimientos() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String key = 'mantenimientos_${widget.vehicle['name']}'; // Usar el nombre del vehículo como clave
+    String key = 'mantenimientos_${widget.vehicle['name']}';
     String? encodedMantenimientos = prefs.getString(key);
     if (encodedMantenimientos != null) {
       List<dynamic> decodedMantenimientos = jsonDecode(encodedMantenimientos);
@@ -77,17 +110,17 @@ class _VehicleDetailPageState extends State<VehicleDetailPage> {
     }
   }
 
-  // Método para obtener la imagen del vehículo según su tipo
+  // Método para obtener la imagen del vehículo
   String _getVehicleImage(String type) {
     switch (type) {
       case 'Coche':
-        return 'assets/coche.png'; // Cambia la ruta según tu estructura de carpetas
+        return 'assets/coche.jpeg';
       case 'Moto':
-        return 'assets/moto.png';
+        return 'assets/moto.jpeg';
       case 'Bici':
-        return 'assets/bici.png';
+        return 'assets/bici.jpeg';
       default:
-        return 'assets/default.png'; // Imagen por defecto
+        return 'assets/default.png';
     }
   }
 
@@ -98,75 +131,90 @@ class _VehicleDetailPageState extends State<VehicleDetailPage> {
         title: Text(widget.vehicle['name']!),
         backgroundColor: Colors.blueGrey[800],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Imagen del vehículo
-            Image.asset(
-              _getVehicleImage(widget.vehicle['type']!),
-              height: 200,
-            ),
-            SizedBox(height: 16),
-
-            // Descripción del vehículo
-            Text(
-              'Descripción:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Text('Kilómetros: ${widget.vehicle['kilometros']}'),
-            Text('Año de fabricación: ${widget.vehicle['anio_fabricacion']}'),
-            Text('Color: ${widget.vehicle['color']}'),
-            Text('Matrícula: ${widget.vehicle['matricula']}'),
-            Text('Próxima ITV: ${widget.vehicle['proxima_itv']}'),
-            Text('Operaciones a realizar: ${widget.vehicle['operaciones']}'),
-            SizedBox(height: 16),
-
-            // Formulario de mantenimiento
-            Text(
-              'Añadir Mantenimiento:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            TextField(
-              controller: _mantenimientoDateController,
-              decoration: InputDecoration(labelText: 'Fecha de Mantenimiento'),
-            ),
-            TextField(
-              controller: _operacionesController,
-              decoration: InputDecoration(labelText: 'Operaciones Realizadas'),
-            ),
-            TextField(
-              controller: _piezasController,
-              decoration: InputDecoration(labelText: 'Piezas Sustituidas'),
-            ),
-            TextField(
-              controller: _precioController,
-              decoration: InputDecoration(labelText: 'Precio'),
-              keyboardType: TextInputType.number,
-            ),
-            SizedBox(height: 16),
-
-            ElevatedButton(
-              onPressed: saveMantenimiento,
-              child: Text('Grabar Mantenimiento'),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blueGrey[800],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.asset(
+                _getVehicleImage(widget.vehicle['type']!),
+                height: 200,
+                width: double.infinity,
+                fit: BoxFit.cover,
               ),
-            ),
-            SizedBox(height: 16),
+              SizedBox(height: 16),
 
-            // Listado de mantenimientos realizados
-            Text(
-              'Mantenimientos Realizados:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            Expanded(
-              child: ListView.builder(
+              // Formulario editable para la información del vehículo
+              TextField(
+                controller: _kilometrosController,
+                decoration: InputDecoration(labelText: 'Kilómetros'),
+                keyboardType: TextInputType.number,
+              ),
+              TextField(
+                controller: _anioFabricacionController,
+                decoration: InputDecoration(labelText: 'Año de Fabricación'),
+                keyboardType: TextInputType.number,
+              ),
+              TextField(
+                controller: _colorController,
+                decoration: InputDecoration(labelText: 'Color'),
+              ),
+              TextField(
+                controller: _matriculaController,
+                decoration: InputDecoration(labelText: 'Matrícula'),
+              ),
+              TextField(
+                controller: _proximaItvController,
+                decoration: InputDecoration(labelText: 'Próxima ITV'),
+              ),
+              TextField(
+                controller: _operacionesController,
+                decoration: InputDecoration(labelText: 'Operaciones a Realizar'),
+              ),
+              ElevatedButton(
+                onPressed: saveVehicleData,
+                child: Text('Guardar Datos del Vehículo'),
+                style: ElevatedButton.styleFrom(primary: Colors.blueGrey[800]),
+              ),
+              SizedBox(height: 16),
+
+              // Formulario para añadir mantenimiento
+              TextField(
+                controller: _mantenimientoDateController,
+                decoration: InputDecoration(labelText: 'Fecha de Mantenimiento'),
+              ),
+              TextField(
+                controller: _mantenimientoOperacionesController,
+                decoration: InputDecoration(labelText: 'Operaciones Realizadas'),
+              ),
+              TextField(
+                controller: _mantenimientoPiezasController,
+                decoration: InputDecoration(labelText: 'Piezas Sustituidas'),
+              ),
+              TextField(
+                controller: _mantenimientoPrecioController,
+                decoration: InputDecoration(labelText: 'Precio'),
+                keyboardType: TextInputType.number,
+              ),
+              ElevatedButton(
+                onPressed: saveMantenimiento,
+                child: Text('Grabar Mantenimiento'),
+                style: ElevatedButton.styleFrom(primary: Colors.blueGrey[800]),
+              ),
+              SizedBox(height: 16),
+
+              // Listado de mantenimientos realizados
+              Text(
+                'Mantenimientos Realizados:',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              ListView.builder(
+                shrinkWrap: true, // Permitir que la lista se ajuste a su contenido
+                physics: NeverScrollableScrollPhysics(), // Desactivar el scroll de la lista
                 itemCount: mantenimientos.length,
                 itemBuilder: (context, index) {
                   return Card(
-                    margin: EdgeInsets.symmetric(vertical: 5),
                     child: ListTile(
                       title: Text('Fecha: ${mantenimientos[index]['fecha']}'),
                       subtitle: Text(
@@ -175,8 +223,8 @@ class _VehicleDetailPageState extends State<VehicleDetailPage> {
                   );
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -61,7 +61,12 @@ flutter:
     - assets/addMoto.jpeg
     - assets/addBici.jpeg
     - assets/addCoche.jpeg
+    - assets/coche.jpeg
+    - assets/moto.jpeg
+    - assets/bici.jpeg
+    - assets/default.png
     - assets/vehiculos.xml
+
 
 
   # The following line ensures that the Material Icons font is
